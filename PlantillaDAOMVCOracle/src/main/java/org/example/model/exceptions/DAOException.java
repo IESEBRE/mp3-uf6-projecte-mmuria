@@ -10,6 +10,13 @@ public class DAOException extends Exception{
     static {
         missatges.put(0, "Error al connectar a la BD!!");
         missatges.put(1, "Restricció d'integritat violada - clau primària duplicada");
+        missatges.put(2, "Falta omplir alguna dada!!");
+        missatges.put(3, "Has d'introduir un pes correcte (>=1 i <=800!!");
+        missatges.put(4, "Has de seleccionar una fila per a modificar-la!!");
+        missatges.put(5, "Dades incorectes");
+        missatges.put(6, "\"Error actualitzant dades a la base de dades: \" + sqlEx.getMessage()");
+        missatges.put(7, "Has de seleccionar una fila per a borrar-la!!");
+        missatges.put(8, "\"Error esborrant dades a la base de dades:  \"+ sqlEx.getMessage()");
         missatges.put(904, "Nom de columna no vàlid");
         missatges.put(936, "Falta expressió en l'ordre SQL");
         missatges.put(942, "La taula o la vista no existeix");

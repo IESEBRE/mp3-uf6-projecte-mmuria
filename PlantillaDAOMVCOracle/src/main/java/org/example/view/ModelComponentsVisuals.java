@@ -1,6 +1,6 @@
 package org.example.view;
 
-import org.example.model.entities.Alumne;
+import org.example.model.entities.Moto;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -9,20 +9,22 @@ public class ModelComponentsVisuals {
 
     private DefaultTableModel modelTaulaAlumne;
     private DefaultTableModel modelTaulaMat;
-    private ComboBoxModel<Alumne.Matricula.Modul> comboBoxModel;
+    private ComboBoxModel<Moto.Quantitat.Provincia> comboBoxModel;
+
+
 
     //Getters
 
 
-    public ComboBoxModel<Alumne.Matricula.Modul> getComboBoxModel() {
+    public ComboBoxModel<Moto.Quantitat.Provincia> getComboBoxModel() {
         return comboBoxModel;
     }
 
-    public DefaultTableModel getModelTaulaAlumne() {
+    public DefaultTableModel getModelTaulaMoto() {
         return modelTaulaAlumne;
     }
 
-    public DefaultTableModel getModelTaulaMat() {
+    public DefaultTableModel getModelTaulaQuantitat() {
         return modelTaulaMat;
     }
 
@@ -30,7 +32,7 @@ public class ModelComponentsVisuals {
 
 
         //Anem a definir l'estructura de la taula dels alumnes
-        modelTaulaAlumne =new DefaultTableModel(new Object[]{"Nom","Pes","És alumne?","Object"},0){
+        modelTaulaAlumne =new DefaultTableModel(new Object[]{"Model","Pes","Es en marches?","Object"},0){
             /**
              * Returns true regardless of parameter values.
              *
@@ -69,7 +71,7 @@ public class ModelComponentsVisuals {
 
 
         //Anem a definir l'estructura de la taula de les matrícules
-        modelTaulaMat =new DefaultTableModel(new Object[]{"MP","Nota"},0){
+        modelTaulaMat =new DefaultTableModel(new Object[]{"Provincia","Quantitat"},0){
             /**
              * Returns true regardless of parameter values.
              *
@@ -91,7 +93,7 @@ public class ModelComponentsVisuals {
             public Class getColumnClass(int column) {
                 switch (column) {
                     case 0:
-                        return Alumne.Matricula.Modul.class;
+                        return Moto.Quantitat.Provincia.class;
                     case 1:
                         return Integer.class;
                     default:
@@ -103,7 +105,7 @@ public class ModelComponentsVisuals {
 
 
         //Estructura del comboBox
-        comboBoxModel=new DefaultComboBoxModel<>(Alumne.Matricula.Modul.values());
+        comboBoxModel=new DefaultComboBoxModel<>(Moto.Quantitat.Provincia.values());
 
 
 
