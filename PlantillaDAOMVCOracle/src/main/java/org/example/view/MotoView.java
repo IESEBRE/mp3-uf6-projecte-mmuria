@@ -3,36 +3,24 @@ package org.example.view;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
-public class MatriculaView extends JFrame{
+public class MotoView extends JFrame{
     private JTabbedPane pestanyes;
     private JTable taula;
     private JScrollPane scrollPane1;
     private JButton insertarButton;
     private JButton modificarButton;
     private JButton borrarButton;
-    private JTextField campNom;
+    private JTextField campModelMoto;
     private JTextField campPes;
-    private JCheckBox caixaAlumne;
+    private JCheckBox caixaEsEnMarches;
     private JPanel panel;
-    private JTable taulaMat;
-    private JComboBox comboMP;
-    private JTextField campNota;
+    private JTable taulaQuantitat;
+    private JComboBox comboProvincia;
+    private JTextField campQuantitat;
     //private JTabbedPane PanelPestanya;
 
     //Getters
 
-
-    public JTable getTaulaMat() {
-        return taulaMat;
-    }
-
-    public JComboBox getComboMP() {
-        return comboMP;
-    }
-
-    public JTextField getCampNota() {
-        return campNota;
-    }
 
     public JTabbedPane getPestanyes() {
         return pestanyes;
@@ -42,33 +30,52 @@ public class MatriculaView extends JFrame{
         return taula;
     }
 
-    public JButton getBorrarButton() {
-        return borrarButton;
-    }
-
-    public JButton getModificarButton() {
-        return modificarButton;
+    public JScrollPane getScrollPane1() {
+        return scrollPane1;
     }
 
     public JButton getInsertarButton() {
         return insertarButton;
     }
 
-    public JTextField getCampNom() {
-        return campNom;
+    public JButton getModificarButton() {
+        return modificarButton;
+    }
+
+    public JButton getBorrarButton() {
+        return borrarButton;
+    }
+
+    public JTextField getCampModelMoto() {
+        return campModelMoto;
     }
 
     public JTextField getCampPes() {
         return campPes;
     }
 
-    public JCheckBox getCaixaAlumne() {
-        return caixaAlumne;
+    public JCheckBox getCaixaEsEnMarches() {
+        return caixaEsEnMarches;
     }
 
+    public JPanel getPanel() {
+        return panel;
+    }
+
+    public JTable getTaulaMat() {
+        return taulaQuantitat;
+    }
+
+    public JComboBox getComboProvincia() {
+        return comboProvincia;
+    }
+
+    public JTextField getCampQuantitat() {
+        return campQuantitat;
+    }
 
     //Constructor de la classe
-    public MatriculaView() {
+    public MotoView() {
 
 
         //Per poder vore la finestra
