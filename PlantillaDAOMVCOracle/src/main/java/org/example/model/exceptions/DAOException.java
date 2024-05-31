@@ -17,6 +17,7 @@ public class DAOException extends Exception{
         missatges.put(6, "\"Error actualitzant dades a la base de dades: \" + sqlEx.getMessage()");
         missatges.put(7, "Has de seleccionar una fila per a borrar-la!!");
         missatges.put(8, "\"Error esborrant dades a la base de dades:  \"+ sqlEx.getMessage()");
+        missatges.put(9, "No pots inserta simbols al camp Model");
         missatges.put(904, "Nom de columna no vàlid");
         missatges.put(936, "Falta expressió en l'ordre SQL");
         missatges.put(942, "La taula o la vista no existeix");

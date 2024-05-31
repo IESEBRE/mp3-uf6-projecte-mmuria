@@ -19,7 +19,7 @@ public class MotoDAOJDBCOracleImpl implements DAO<Moto> {
     public static String DB_PASSWORD;
 
     static {
-        try (InputStream input = MotoDAOJDBCOracleImpl.class.getClassLoader().getResourceAsStream("system.properties")) {
+        try (InputStream input = MotoDAOJDBCOracleImpl.class.getClassLoader().getResourceAsStream("database.properties")) {
             Properties prop = new Properties();
             prop.load(input);
 

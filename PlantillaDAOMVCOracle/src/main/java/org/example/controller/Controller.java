@@ -118,42 +118,46 @@ public class Controller implements PropertyChangeListener { //1. Implementació 
                         JCheckBox caixaEsEnMarches = view.getCaixaEsEnMarches();
                         DefaultTableModel model = modelo.getModelTaulaMoto();
 
+                        // Define a regular expression that matches only alphanumeric characters
+                        String simbols = "^[a-zA-Z0-9 ]*$";
+
                         if (pestanyes.getSelectedIndex() == 0) { // Si estem a la pestanya de moto
-                            // Comprovem que totes les caselles continguen informació
                             if (campModelMoto.getText().isBlank() || campPes.getText().isBlank()) {
                                 setExcepcio(new DAOException(2));
                             } else {
-                                try {
-                                    NumberFormat num = NumberFormat.getNumberInstance(Locale.getDefault()); // Creem un número que entèn la cultura que utilitza l'aplicació
-                                    double pes;
+                                if (!campModelMoto.getText().matches(simbols)) {
+                                    setExcepcio(new DAOException(9));
+                                } else {
                                     try {
-                                        pes = Double.parseDouble(campPes.getText().replaceAll(",", "."));
-                                    } catch (NumberFormatException nfe) {
-                                        setExcepcio(new DAOException(5));
-                                        return;
-                                    }
-                                    if (pes < 1 || pes > 800){
-                                        setExcepcio(new DAOException(3));
-                                    } else {
-                                        Moto al = new Moto(campModelMoto.getText(), pes, caixaEsEnMarches.isSelected(), new TreeSet<Quantitat>());
-                                        model.addRow(new Object[]{campModelMoto.getText(), pes, caixaEsEnMarches.isSelected(), al});
+                                        NumberFormat num = NumberFormat.getNumberInstance(Locale.getDefault()); // Creem un número que entèn la cultura que utilitza l'aplicació
+                                        double pes;
+                                        try {
+                                            pes = Double.parseDouble(campPes.getText().replaceAll(",", "."));
+                                        } catch (NumberFormatException nfe) {
+                                            setExcepcio(new DAOException(5));
+                                            return;
+                                        }
+                                        if (pes < 1 || pes > 800){
+                                            setExcepcio(new DAOException(3));
+                                        } else {
+                                            Moto al = new Moto(campModelMoto.getText(), pes, caixaEsEnMarches.isSelected(), new TreeSet<Quantitat>());
+                                            model.addRow(new Object[]{campModelMoto.getText(), pes, caixaEsEnMarches.isSelected(), al});
 
-                                        // Inserir dades a la base de dades
-                                        dadesMoto.save(al);
-                                        actualizarTaulaMotos();
+                                            dadesMoto.save(al);
+                                            actualizarTaulaMotos();
 
-                                        campModelMoto.setText("");
-                                        campModelMoto.setSelectionStart(0);
-                                        campModelMoto.setSelectionEnd(campModelMoto.getText().length());
-                                        campPes.setText("");
-                                        campModelMoto.requestFocus(); // intentem que el foco vaigue al camp del nom
+                                            campModelMoto.setText("");
+                                            campModelMoto.setSelectionStart(0);
+                                            campModelMoto.setSelectionEnd(campModelMoto.getText().length());
+                                            campPes.setText("");
+                                            campModelMoto.requestFocus(); // intentem que el foco vaigue al camp del nom
+                                        }
+                                    } catch (DAOException sqlEx) {
+                                        setExcepcio(new DAOException(6));
                                     }
-                                } catch (DAOException sqlEx) {
-                                    setExcepcio(new DAOException(6));
                                 }
                             }
                         } else {
-                            // Obtinc moto de la columna que conté l'objecte
                             Moto mo = (Moto) model.getValueAt(taula.getSelectedRow(), 3);
                             Quantitat m = new Quantitat((Quantitat.Provincia) view.getComboProvincia().getSelectedItem(), Integer.parseInt(view.getCampQuantitat().getText()));
                             mo.getQuantitat().add(m);
@@ -171,53 +175,58 @@ public class Controller implements PropertyChangeListener { //1. Implementació 
                 new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
+                        // Define a regular expression that matches only alphanumeric characters
+                        String simbols = "^[a-zA-Z0-9 ]*$";
+
                         if (pestanyes.getSelectedIndex() == 0) { // Si estem a la pestanya de moto
                             // Comprovem que hi hagi una fila seleccionada
                             if (taula.getSelectedRow() == -1) {
                                 setExcepcio(new DAOException(4));
                             } else {
-                                // Comprovem que totes les caselles continguen informació
                                 if (campModelMoto.getText().isBlank() || campPes.getText().isBlank()) {
                                     setExcepcio(new DAOException(2));
                                 } else {
-                                    try {
-                                        NumberFormat num = NumberFormat.getNumberInstance(Locale.getDefault()); // Creem un número que entèn la cultura que utilitza l'aplicació
-                                        double pes;
+                                    if (!campModelMoto.getText().matches(simbols)) {
+                                        setExcepcio(new DAOException(9));
+                                    }  else {
                                         try {
-                                            pes = Double.parseDouble(campPes.getText().replaceAll(",", "."));
-                                        } catch (NumberFormatException nfe) {
-                                            setExcepcio(new DAOException(5)); // Assuming 5 is the code for invalid weight format
-                                            return;
+                                            NumberFormat num = NumberFormat.getNumberInstance(Locale.getDefault()); // Creem un número que entèn la cultura que utilitza l'aplicació
+                                            double pes;
+                                            try {
+                                                pes = Double.parseDouble(campPes.getText().replaceAll(",", "."));
+                                            } catch (NumberFormatException nfe) {
+                                                setExcepcio(new DAOException(5)); // Assuming 5 is the code for invalid weight format
+                                                return;
+                                            }
+                                            if (pes < 1 || pes > 800){
+                                                setExcepcio(new DAOException(3));
+                                            } else {
+                                                int selectedRow = taula.getSelectedRow();
+                                                String modelMotoAntic = (String) model.getValueAt(selectedRow, 0); // Obtenim el model anterior per a identificar la fila a actualitzar
+
+                                                model.setValueAt(campModelMoto.getText(), selectedRow, 0);
+                                                model.setValueAt(pes, selectedRow, 1);
+                                                model.setValueAt(caixaEsEnMarches.isSelected(), selectedRow, 2);
+                                                Moto al = (Moto) model.getValueAt(selectedRow, 3);
+                                                al.setModelMoto(campModelMoto.getText());
+                                                al.setPes(pes);
+                                                al.setEsEnMarches(caixaEsEnMarches.isSelected());
+
+                                                // Actualitzar dades a la base de dades
+                                                dadesMoto.update(al);
+                                                actualizarTaulaMotos();
+
+                                                campModelMoto.setText("");
+                                                campPes.setText("");
+                                                campModelMoto.requestFocus(); // intentem que el foco vaigue al camp del nom
+                                            }
+                                        } catch (DAOException sqlEx) {
+                                            setExcepcio(new DAOException(6));
                                         }
-                                        if (pes < 1 || pes > 800){
-                                            setExcepcio(new DAOException(3));
-                                        } else {
-                                            int selectedRow = taula.getSelectedRow();
-                                            String modelMotoAntic = (String) model.getValueAt(selectedRow, 0); // Obtenim el model anterior per a identificar la fila a actualitzar
-
-                                            model.setValueAt(campModelMoto.getText(), selectedRow, 0);
-                                            model.setValueAt(pes, selectedRow, 1);
-                                            model.setValueAt(caixaEsEnMarches.isSelected(), selectedRow, 2);
-                                            Moto al = (Moto) model.getValueAt(selectedRow, 3);
-                                            al.setModelMoto(campModelMoto.getText());
-                                            al.setPes(pes);
-                                            al.setEsEnMarches(caixaEsEnMarches.isSelected());
-
-                                            // Actualitzar dades a la base de dades
-                                            dadesMoto.update(al);
-                                            actualizarTaulaMotos();
-
-                                            campModelMoto.setText("");
-                                            campPes.setText("");
-                                            campModelMoto.requestFocus(); // intentem que el foco vaigue al camp del nom
-                                        }
-                                    } catch (DAOException sqlEx) {
-                                        setExcepcio(new DAOException(6));
                                     }
                                 }
                             }
                         } else {
-                            // Obtinc moto de la columna que conté l'objecte
                             Moto mo = (Moto) model.getValueAt(taula.getSelectedRow(), 3); // Obtinc l'objecte de la fila seleccionada
                             Quantitat m = new Quantitat((Quantitat.Provincia) view.getComboProvincia().getSelectedItem(), Integer.parseInt(view.getCampQuantitat().getText()));
                             mo.getQuantitat().add(m);
@@ -247,12 +256,10 @@ public class Controller implements PropertyChangeListener { //1. Implementació 
                     caixaEsEnMarches.setSelected((Boolean) model.getValueAt(filaSel, 2));
 
                     //Activem la pestanya de la matrícula de moto seleccionat
-                    view.getPestanyes().setEnabledAt(1, false);
+                    view.getPestanyes().setEnabledAt(1, true);
                     //view.getPestanyes().setTitleAt(1, "Quantitat de ..." + campModelMoto.getText());
                     view.getPestanyes().setTitleAt(1, "Quantitat de ...");
 
-                    //Posem valor a el combo d'MPs
-                    //view.getComboMP().setModel(modelo.getComboBoxModel());
                     ompliQuantitat((Moto) model.getValueAt(filaSel, 3), modelQuantitat);
                 } else {                  //Hem deseleccionat una fila
                     //Posem els camps de text en blanc
@@ -321,7 +328,6 @@ public class Controller implements PropertyChangeListener { //1. Implementació 
     private static void ompliQuantitat(Moto al, DefaultTableModel modelQuantitat) {
         //Omplim el model de la taula de matrícula de motos seleccionat
         modelQuantitat.setRowCount(0);
-        // Fill the table model with data from the collection
         for (Quantitat quantitat : al.getQuantitat()) {
             modelQuantitat.addRow(new Object[]{quantitat.getProvincia(), quantitat.getQuantitat()});
         }
@@ -390,8 +396,5 @@ public class Controller implements PropertyChangeListener { //1. Implementació 
             }
         }
     }
-
-    // Mètode per a inserir dades a la base de dades
-
 
 }
